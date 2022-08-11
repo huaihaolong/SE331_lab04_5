@@ -1,18 +1,42 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <PassengerCard
+      v-for="passenger in passengers"
+      :key="passenger.id"
+      :passenger="passenger"
+    />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-
+import PassengerCard from '@/components/PassengerCard.vue'
+import PassengerService from '@/services/PassengerService'
 export default {
-  name: "HomeView",
+  name: 'HomeView',
   components: {
-    HelloWorld,
+    PassengerCard
   },
-};
+  data() {
+    return {
+      passengers: null
+    }
+  },
+  created() {
+    PassengerService.getPassengers()
+      .then((response) => {
+        this.passengers = response.data
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+}
 </script>
+<style scoped>
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+</style>
